@@ -1,0 +1,76 @@
+package application;
+
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+
+public class Main extends Application {
+
+    private static final int LABELS_AT_START = 4;
+    private Button btn1, btn2, btn3;
+    private VBox vbox;
+    private ScrollPane scrollPane;
+    private FlowPane rootNode;
+
+    class Add_Label_Handler implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent event) {
+            int labelNumber = vbox.getChildren().size() + 1;
+            vbox.getChildren().add(new Label("Label" + labelNumber));
+        }
+
+    }
+
+    class Remove_Label_Handler implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent event) {
+            int size = vbox.getChildren().size();
+            if (size > 0) {
+                vbox.getChildren().remove(size - 1);
+            }
+        }
+    }
+
+
+
+    @Override
+    public void start(Stage stage) {
+        rootNode = new FlowPane();
+        vbox = new VBox();
+        scrollPane = new ScrollPane(vbox);
+
+        btn1 = new Button("Beenden");
+        btn1.setOnAction((event) -> System.exit(0));
+
+        btn2 = new Button("Add Label");
+        btn2.setOnAction(new Add_Label_Handler());
+
+        btn3 = new Button("Delete Label");
+        btn3.setOnAction(new Remove_Label_Handler());
+
+        for (int i = 1; i <= LABELS_AT_START; i++) {
+            vbox.getChildren().add(new Label("Label" + i));
+        }
+
+        rootNode.getChildren().addAll(btn1, btn2, btn3, scrollPane);
+
+
+        Scene sc = new Scene(rootNode, 200, 300);
+        stage.setScene(sc);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
